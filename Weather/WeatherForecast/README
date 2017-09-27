@@ -1,0 +1,33 @@
+Install Qtcreator:
+wget http://download.qt.io/official_releases/qt/5.9/5.9.1/qt-opensource-linux-x64-5.9.1.run 
+chmod +x qt-opensource-linux-x64-5.9.1.run 
+./qt-opensource-linux-x64-5.9.1.run 
+
+sudo apt-get install mesa-common-dev
+sudo apt-get install libglu1-mesa-dev -y
+sudo apt-get update
+
+
+
+Install essentials:
+
+sudo apt-get install gnuplot
+
+sudo apt-get install libboost-all-dev
+
+//sudo pip install yweather
+Curl:
+sudo apt-get install libcurl4-openssl-dev
+Json:
+sudo apt-get install libjson0 libjson0-dev
+
+Gtests
+wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
+tar xf release-1.8.0.tar.gz
+cd googletest-release-1.8.0
+sudo apt install cmake
+cmake -DBUILD_SHARED_LIBS=ON .
+make
+sudo cp -a googletest/include/gtest /usr/include
+sudo cp -a ./googlemock/gtest/libgtest_main.so ./googlemock/gtest/libgtest.so /usr/lib/
+sudo ldconfig -v | grep gtest

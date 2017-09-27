@@ -1,0 +1,2 @@
+g++ -o main main.cpp  ../../src/ProgramHandler.cpp  ../../src/Helper.cpp  ../../src/FileHandler.cpp ../../src/MessagingHandler.cpp -std=c++11 -lgtest  -lrt 
+
