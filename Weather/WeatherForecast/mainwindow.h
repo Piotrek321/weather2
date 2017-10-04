@@ -19,6 +19,9 @@
 #include "inc/FileHandler.h"
 #include "inc/MessagingHandler.h"
 #include "inc/Helper.h"
+#include "inc/WeatherOWM.h"
+#include "inc/WeatherYahoo.h"
+
 #include <QThread>
 #include <QDebug>
 #include <signal.h>
@@ -42,6 +45,7 @@ private:
 
     QLabel *label;
     std::unique_ptr<MessagingHandler> messagingHandler;
+
     std::shared_ptr<ProgramHandler> progHandler;
     QMenu *menu;
     QAction *quitAction;
@@ -58,6 +62,9 @@ public:
     {}
     void setMessageHandler(MessagingHandler * msgHandler);
     void setProgramHandler(ProgramHandler * prgHandler);
+    void setOwmWeatherForecast(WeatherAPI * owm);
+    void setYahooWeatherForecast(WeatherAPI * yahoo);
+
 
 private slots:
     void runApp();

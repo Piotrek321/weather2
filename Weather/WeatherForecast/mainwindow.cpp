@@ -8,19 +8,33 @@ bool compilationFinished = false;
 bool compilationStarted = false;
 bool isRestart =false;
 const std::string filePath ("../../Weather/WeatherForecast/prog");
-
+std::unique_ptr<WeatherAPI> yahooWeatherForecast;
+std::unique_ptr<WeatherAPI> owmWeatherForecast;
 class myThread: public QThread
 {
 public:
+    QString cityName;
     void run()
-    {
-        compilationStarted = true;
+    {qDebug() << "RUN";
+        owmWeatherForecast->printTemperature(cityName.toStdString());
+        yahooWeatherForecast->printTemperature(cityName.toStdString());
+
+        /*compilationStarted = true;
         ProgramHandler::runMakefile();
         std::cout <<"Compilation completed\n" <<std::flush;
         compilationFinished = true;
-        compilationStarted = false;
+        compilationStarted = false;*/
     }
 };
+void MainWindow::setOwmWeatherForecast(WeatherAPI * owm)
+{
+    owmWeatherForecast.reset(owm);
+}
+
+void MainWindow::setYahooWeatherForecast(WeatherAPI * yahoo)
+{
+    yahooWeatherForecast.reset(yahoo);
+}
 
 void MainWindow::setMessageHandler(MessagingHandler * msgHandler)
 {
@@ -75,6 +89,8 @@ MainWindow::MainWindow()
 
     //connect(lnEdit, SIGNAL(textChanged( const QString &)), this, SLOT(lineChanged(const QString &)));
 
+    std::ofstream myfile;
+    myfile.open ("temperature.txt", std::ios::out | std::ios::app);
 
     setMinimumSize(200, 200);
     resize(480, 320);
@@ -105,8 +121,11 @@ void MainWindow::restart()
 
 void MainWindow::getData()
 {
-    cityName = lnEdit->text().toStdString();
-    messagingHandler->sendMessage(cityName,0);
+   // cityName = lnEdit->text().toStdString();
+    qDebug() << "getdata";
+    t->cityName = lnEdit->text();
+    t->start();
+  //  messagingHandler->sendMessage(cityName,0);
 }
 
 void MainWindow::clean()
@@ -120,7 +139,7 @@ void MainWindow::compile()
 {
     std::cout <<"Compilation started\n" <<std::flush;
 
-    t->start();
+ //   t->start();
 }
 
 void MainWindow::runApp()

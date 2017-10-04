@@ -7,6 +7,8 @@
 #include <QtWidgets/QMainWindow>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
+#include "inc/WeatherOWM.h"
+#include "inc/WeatherYahoo.h"
 
 QT_CHARTS_USE_NAMESPACE
 const std::string filePath ("../../Weather/WeatherForecast/prog");
@@ -42,10 +44,13 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     MainWindow w;
-    auto progHandler = std::make_unique<ProgramHandler>(filePath);
-    auto  messagingHandler = std::make_unique<MessagingHandler>("/myqueue", 1);
-    w.setMessageHandler(messagingHandler.release());
-    w.setProgramHandler(progHandler.release());
+    //auto progHandler = std::make_unique<ProgramHandler>(filePath);
+    //auto  messagingHandler = std::make_unique<MessagingHandler>("/myqueue", 1);
+    //auto xx = std::make_unique<WeatherYahoo>();
+    w.setYahooWeatherForecast(std::make_unique<WeatherYahoo>().release());
+    w.setOwmWeatherForecast(std::make_unique<WeatherOWM>().release());
+    w.setMessageHandler(std::make_unique<MessagingHandler>("/myqueue", 1).release());
+    w.setProgramHandler(std::make_unique<ProgramHandler>(filePath).release());
     w.show();
 
     return a.exec();
