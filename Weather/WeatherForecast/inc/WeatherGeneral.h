@@ -14,7 +14,7 @@ class WeatherGeneral : public WeatherAPI
 		static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 		virtual std::string getTemperature(std::string cityName) =0;
 		WeatherGeneral(std::string appName) :m_appName(appName) {};
-		virtual void printTemperature(std::string cityName);
+        virtual float printTemperature(std::string cityName);
 		virtual ~WeatherGeneral(){};
 		virtual void init();
 

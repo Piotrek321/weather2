@@ -41,7 +41,7 @@ private:
     myThread * t;
 
     QLabel *label;
-    std::shared_ptr<MessagingHandler> messagingHandler;
+    std::unique_ptr<MessagingHandler> messagingHandler;
     std::shared_ptr<ProgramHandler> progHandler;
     QMenu *menu;
     QAction *quitAction;
@@ -56,6 +56,8 @@ public:
     MainWindow();
     ~MainWindow()
     {}
+    void setMessageHandler(MessagingHandler * msgHandler);
+    void setProgramHandler(ProgramHandler * prgHandler);
 
 private slots:
     void runApp();

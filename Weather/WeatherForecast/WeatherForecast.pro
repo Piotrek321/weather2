@@ -4,9 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui charts
+QT       += core gui charts sql
 
-CONFIG += c++11
+CONFIG += c++14
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = qtstart

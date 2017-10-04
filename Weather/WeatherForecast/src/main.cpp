@@ -2,13 +2,13 @@
 #include "../inc/WeatherOWM.h"
 #include "../inc/WeatherYahoo.h"
 #include "../inc/MessagingHandler.h"
-
+#include <ctime>
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdlib>
 #include <cstdio>
 #include <mqueue.h>
-
+#include <fstream>
 #define MSGSZ     128
 
 bool isResetCalled = false;
@@ -31,7 +31,11 @@ int main()
 	y.init();
 	WeatherAPI * b = new WeatherOWM;
 	WeatherAPI * c= new WeatherYahoo;
-/*
+
+  std::ofstream myfile;
+  myfile.open ("temperature.txt", std::ios::out | std::ios::app);
+
+  /*
   struct sigaction sigac;
   sigemptyset(&sigac.sa_mask);
   sigac.sa_sigaction = handler;
@@ -50,12 +54,17 @@ int main()
 		char * message = new char [100];
 		if( mq_receive(messageQueueHandler, message, 100, NULL) != -1)
 		{
-			c->printTemperature(message);
-			b->printTemperature(message);
+			std::time_t result = std::time(nullptr);
+   	  myfile << std::asctime(std::localtime(&result));
+			float res = c->printTemperature(message);
+			myfile << "Yahoo: " << res << std::endl;
+			res = b->printTemperature(message);
+			myfile << "OWM: " << res << std::endl;
 		}
 		delete [] message;
 		sleep(1);
 	}
+
 	delete b;
 	delete c;
   //std::cout << mq_close(messageQueueHandler) << std::endl;

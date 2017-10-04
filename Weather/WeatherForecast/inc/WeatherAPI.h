@@ -17,12 +17,12 @@
 class WeatherAPI
 {
 
-	public:
-		virtual std::string getTemperature(std::string cityName) =0;
-		virtual ~WeatherAPI(){};
-		virtual void printTemperature(std::string cityName) =0;
-		virtual void init() =0;
-		virtual void printMap() =0;
+public:
+    virtual std::string getTemperature(std::string cityName) =0;
+    virtual ~WeatherAPI(){};
+    virtual float printTemperature(std::string cityName) =0;
+    virtual void init() =0;
+    virtual void printMap() =0;
 };
 
 #endif

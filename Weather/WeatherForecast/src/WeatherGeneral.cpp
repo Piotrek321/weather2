@@ -20,13 +20,14 @@ std::string WeatherGeneral::sendHttpRequest(std::string httpQuery , const char *
 	return "";
 }
 
-void WeatherGeneral::printTemperature(std::string cityName)
+float WeatherGeneral::printTemperature(std::string cityName)
 {
 				
 	std::string temperature = getTemperature(cityName);
    
-	if(temperature == "") return ;
+    if(temperature == "") return -1000;
   std::cout <<"Temperature from " << m_appName << ". City: " << cityName << " temperature: " << temperature << "\n" << std::flush;
+  return std::atof(temperature.c_str());
 }
 
 size_t WeatherGeneral::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)

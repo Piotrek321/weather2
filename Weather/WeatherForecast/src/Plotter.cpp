@@ -12,7 +12,7 @@ void Plotter::plotChart(Gnuplot &gp)
 
 void Plotter::init()
 {
-/*
+    /*
   pid_t pid;
   key_t MyKey = KEY_VALUE;
   int   SharedMemoryID;

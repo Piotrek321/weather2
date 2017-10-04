@@ -9,6 +9,8 @@
 #include <QtCharts/QLineSeries>
 
 QT_CHARTS_USE_NAMESPACE
+const std::string filePath ("../../Weather/WeatherForecast/prog");
+
 int main(int argc, char *argv[])
 {
    /* QApplication a(argc, argv);
@@ -40,7 +42,10 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     MainWindow w;
-
+    auto progHandler = std::make_unique<ProgramHandler>(filePath);
+    auto  messagingHandler = std::make_unique<MessagingHandler>("/myqueue", 1);
+    w.setMessageHandler(messagingHandler.release());
+    w.setProgramHandler(progHandler.release());
     w.show();
 
     return a.exec();

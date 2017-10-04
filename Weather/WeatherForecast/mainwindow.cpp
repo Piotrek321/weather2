@@ -7,6 +7,8 @@
 bool compilationFinished = false;
 bool compilationStarted = false;
 bool isRestart =false;
+const std::string filePath ("../../Weather/WeatherForecast/prog");
+
 class myThread: public QThread
 {
 public:
@@ -19,15 +21,23 @@ public:
         compilationStarted = false;
     }
 };
-const std::string filePath ("../../Weather/WeatherForecast/prog");
+
+void MainWindow::setMessageHandler(MessagingHandler * msgHandler)
+{
+    messagingHandler.reset(msgHandler);
+}
+
+void MainWindow::setProgramHandler(ProgramHandler * prgHandler)
+{
+    progHandler.reset(prgHandler);
+}
+
 MainWindow::MainWindow()
 {
     QTextCodec::codecForName ("UTF-8");
-    progHandler = std::make_shared<ProgramHandler>(filePath);
-    messagingHandler = std::make_shared<MessagingHandler>("/myqueue", 1);
 
-   //createMenus();
-   // createStatusBar();
+    //createMenus();
+    // createStatusBar();
     label = new QLabel(tr("Weather forecast"), this);
     label->setGeometry(5, 15, 150, 30);
 
@@ -71,76 +81,74 @@ MainWindow::MainWindow()
 }
 void MainWindow::exit()
 {
- /* mq_close(messageQueueHandler);
+    /* mq_close(messageQueueHandler);
   mq_unlink("/myqueue");*/
-  progHandler->stop();
-  qApp->quit();
-
+    progHandler->stop();
+    qApp->quit();
 }
 
 void MainWindow::restart()
 {
-  if(progHandler->performRestart() == -1)
-  {
-    std::cout <<"Restart went wrong" << std::endl;
-  }
-  else
-  {
-    //mq_close(messageQueueHandler);
-    //mq_unlink("/myqueue");
-    isRestart = true;
-    this->runApp();
-    std::cout <<"Restart was successful" << std::endl;
-  }
+    if(progHandler->performRestart() == -1)
+    {
+        std::cout <<"Restart went wrong" << std::endl;
+    }
+    else
+    {
+        //mq_close(messageQueueHandler);
+        //mq_unlink("/myqueue");
+        isRestart = true;
+        this->runApp();
+        std::cout <<"Restart was successful" << std::endl;
+    }
 }
 
 void MainWindow::getData()
 {
-  cityName = lnEdit->text().toStdString();
-  messagingHandler->sendMessage(cityName,0);
-
+    cityName = lnEdit->text().toStdString();
+    messagingHandler->sendMessage(cityName,0);
 }
 
 void MainWindow::clean()
 {
-  std::cout <<"Make clean\n" <<std::flush;
-  compilationFinished = false;
-  ProgramHandler::cleanMakefile();
+    std::cout <<"Make clean\n" <<std::flush;
+    compilationFinished = false;
+    ProgramHandler::cleanMakefile();
 }
 
 void MainWindow::compile()
 {
-  std::cout <<"Compilation started\n" <<std::flush;
+    std::cout <<"Compilation started\n" <<std::flush;
 
-  t->start();
+    t->start();
 }
 
 void MainWindow::runApp()
 {
-  if(compilationFinished || FileHandler::doesFileExist(filePath, 0))
-  {
-     std::cout <<"RunApp\n" <<std::flush;
-     if(!isRestart) progHandler->startApp();
-     isRestart = false;
+    if(compilationFinished || FileHandler::doesFileExist(filePath, 0))
+    {
+        std::cout <<"RunApp\n" <<std::flush;
+        if(!isRestart) progHandler->startApp();
+        isRestart = false;
 
-  }else
-  {
-    if(compilationStarted) std::cout <<"Compilation started but not finished.\n" <<std::flush;
-    else std::cout <<"Press compile button.\n" <<std::flush;
-  }
+    }else
+    {
+        if(compilationStarted) std::cout <<"Compilation started but not finished.\n" <<std::flush;
+        else std::cout <<"Press compile button.\n" <<std::flush;
+    }
 }
 
 void MainWindow::createMenus()
 {
-  menu = menuBar()->addMenu(tr("&Plik"));
+    menu = menuBar()->addMenu(tr("&Plik"));
 
-  quitAction = new QAction(tr("&Wyjście"), this);
-  quitAction->setStatusTip(tr("Wyjdź z programu."));
-  connect (quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-  menu->addAction(quitAction);
+    quitAction = new QAction(tr("&Wyjście"), this);
+    quitAction->setStatusTip(tr("Wyjdź z programu."));
+    connect (quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    menu->addAction(quitAction);
 }
 
 void MainWindow::createStatusBar()
 {
-  statusBar()->showMessage(tr("Gotowy"));
+    statusBar()->showMessage(tr("Gotowy"));
 }
